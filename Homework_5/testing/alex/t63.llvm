@@ -1,0 +1,100 @@
+declare i32 @printf(i8*, ...)
+declare void @exit(i32)
+@.int_specifier = constant [4 x i8] c"%d\0A\00"
+@.str_specifier = constant [4 x i8] c"%s\0A\00"
+define void @printi(i32) {
+    %spec_ptr = getelementptr [4 x i8], [4 x i8]* @.int_specifier, i32 0, i32 0
+    call i32 (i8*, ...) @printf(i8* %spec_ptr, i32 %0)
+    ret void
+}
+define void @print(i8*) {
+    %spec_ptr = getelementptr [4 x i8], [4 x i8]* @.str_specifier, i32 0, i32 0
+    call i32 (i8*, ...) @printf(i8* %spec_ptr, i8* %0)
+    ret void
+}
+@.str_div_zero = constant [23 x i8] c"Error division by zero\00"
+define void @errorIfZero9001(i32) {
+	%cond = icmp eq i32 0, %0
+	br i1 %cond, label %exit, label %return
+exit:
+	%err_str_ptr = getelementptr [23 x i8], [23 x i8]* @.str_div_zero, i32 0, i32 0
+	call void(i8*) @print(i8* %err_str_ptr)
+	call void(i32) @exit(i32 1)
+	br label %return
+return:
+	ret void
+}
+@.string_id0 = constant [3 x i8] c"ok\00"
+@.string_id1 = constant [7 x i8] c"not ok\00"
+@.string_id2 = constant [4 x i8] c"ok2\00"
+@.string_id3 = constant [8 x i8] c"not ok2\00"
+define i1@test(){
+%sp = alloca [50 x i32]
+br label %statement_3
+statement_3:
+br label %true_case_5
+true_case_5:
+br label %set_bool_reg_9
+false_case_7:
+br label %set_bool_reg_9
+set_bool_reg_9:
+%reg1 = phi i1 [1, %true_case_5], [0, %false_case_7]
+ret i1 %reg1
+br label %func_end_13
+func_end_13:
+ret i1 0
+}
+define i1@test2(){
+%sp = alloca [50 x i32]
+br label %statement_19
+statement_19:
+%reg2 = icmp sgt i32 1, 0
+br i1 %reg2, label %true_case_22, label %false_case_24
+true_case_22:
+br label %set_bool_reg_26
+false_case_24:
+br label %set_bool_reg_26
+set_bool_reg_26:
+%reg3 = phi i1 [1, %true_case_22], [0, %false_case_24]
+ret i1 %reg3
+br label %func_end_30
+func_end_30:
+ret i1 0
+}
+define void@main(){
+%sp = alloca [50 x i32]
+br label %parse_label_36
+parse_label_36:
+%reg4 = call i1() @test()
+br i1 %reg4, label %true_case_39, label %false_case_41
+true_case_39:
+br label %statement_43
+false_case_41:
+br label %statement_47
+statement_43:
+%str_ptr_reg5 = getelementptr [3 x i8], [3 x i8]* @.string_id0, i32 0, i32 0
+call void(i8*) @print(i8* %str_ptr_reg5)
+br label %parse_label_51
+statement_47:
+%str_ptr_reg6 = getelementptr [7 x i8], [7 x i8]* @.string_id1, i32 0, i32 0
+call void(i8*) @print(i8* %str_ptr_reg6)
+br label %parse_label_51
+parse_label_51:
+%reg7 = call i1() @test2()
+br i1 %reg7, label %true_case_54, label %false_case_56
+true_case_54:
+br label %statement_58
+false_case_56:
+br label %statement_62
+statement_58:
+%str_ptr_reg8 = getelementptr [4 x i8], [4 x i8]* @.string_id2, i32 0, i32 0
+call void(i8*) @print(i8* %str_ptr_reg8)
+br label %func_end_67
+statement_62:
+%str_ptr_reg9 = getelementptr [8 x i8], [8 x i8]* @.string_id3, i32 0, i32 0
+call void(i8*) @print(i8* %str_ptr_reg9)
+br label %func_end_67
+br label %func_end_67
+func_end_67:
+ret void
+}
