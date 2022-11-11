@@ -1,0 +1,3 @@
+1 NUM 0
+2 BINOP +
+2 RELOP <=

@@ -1,0 +1,110 @@
+%{
+	int yylex();
+	void yyerror(const char* s);
+	#include "stdio.h"
+	#include "output.hpp"
+	#define dor(i) output::printProductionRule(i);
+	extern int yylineno;
+
+	#ifdef MYDB
+		#define YYERROR_VERBOSE 1
+		#define YYDEBUG 1
+		extern int yydebug;
+	#endif
+%}
+
+%nonassoc INT VOID BYTE B BOOL CONST
+%token TRUE FALSE
+%token RETURN WHILE BREAK CONTINUE SC
+
+%token NUM STRING
+%token COMMA
+%token ID
+
+%right ASSIGN
+%left OR
+%left AND
+%left RELOP
+%left BINOP
+%right NOT
+
+%left LPAREN RPAREN LBRACE RBRACE
+%right IF
+%token ELSE
+%%
+
+Program:			Funcs {dor(1)};
+Funcs:				FuncDecl Funcs {dor(3)}
+					| {dor(2)};
+FuncDecl:			RetType ID LPAREN Formals RPAREN LBRACE Statements RBRACE {dor(4)};
+RetType:			Type {dor(5)}
+					|VOID {dor(6)};
+Formals:			{dor(7)}
+					|FormalsList {dor(8)}
+FormalsList:		FormalDecl {dor(9)}
+					|FormalDecl COMMA FormalsList {dor(10)};
+FormalDecl:			TypeAnnotation Type ID {dor(11)};
+Statements:			Statement {dor(12)}
+					|Statements Statement {dor(13)};
+Call:				ID LPAREN ExpList RPAREN {dor(26)}
+					|ID LPAREN RPAREN {dor(27)};
+ExpList:			Exp {dor(28)}
+					|Exp COMMA ExpList {dor(29)};
+Type:				INT {dor(30)}
+					|BYTE {dor(31)}
+					|BOOL {dor(32)};
+TypeAnnotation:		CONST {dor(34)}
+					| {dor(33)};	
+Exp:				LPAREN Exp RPAREN {dor(35)}
+					| Call {dor(38)}
+					| ID {dor(37)}
+					| NUM {dor(39)}
+					| NUM B {dor(40)}
+					| STRING {dor(41)}
+					| TRUE {dor(42)}
+					| FALSE {dor(43)}
+					| NOT Exp {dor(44)}
+					| Exp BinExpEnding {dor(36)}
+					| Exp AndExpEnding {dor(45)}
+					| Exp OrExpEnding {dor(46)}
+					| Exp RelopExpEnding {dor(47)}
+					| LPAREN TypeAnnotation Type RPAREN Exp {dor(48)};
+
+Statement:			OpenStatment
+					| ClosedStatment;
+					
+OpenStatment:		IF LPAREN Exp RPAREN Statement {dor(21)}
+					| IF LPAREN Exp RPAREN ClosedStatment ELSE OpenStatment {dor(22)}
+					| WHILE LPAREN Exp RPAREN OpenStatment {dor(23)};
+
+ClosedStatment:		SimpleStatement
+					| IF LPAREN Exp RPAREN ClosedStatment ELSE ClosedStatment {dor(22)}
+					| WHILE LPAREN Exp RPAREN ClosedStatment {dor(23)};
+
+SimpleStatement:	LBRACE Statements RBRACE {dor(14)}
+					|TypeAnnotation Type ID SC {dor(15)}
+					|TypeAnnotation Type ID ASSIGN Exp SC {dor(16)}
+					|ID ASSIGN Exp SC {dor(17)}
+					|Call SC {dor(18)}
+					|RETURN SC {dor(19)}
+					|RETURN Exp SC {dor(20)}
+					|BREAK SC {dor(24)}
+					|CONTINUE SC {dor(25)};
+
+BinExpEnding:		BINOP Exp;
+AndExpEnding:		AND Exp;
+OrExpEnding:		OR Exp;
+RelopExpEnding:		RELOP Exp;
+%%
+
+void yyerror(const char* s){
+	output::errorSyn(yylineno);
+	exit(69);
+}
+
+int main(){
+	#ifdef MYDB
+		yydebug = 1;
+	#endif
+	return yyparse();
+}

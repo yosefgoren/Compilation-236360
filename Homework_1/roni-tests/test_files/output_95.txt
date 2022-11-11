@@ -1,0 +1,6 @@
+1 BINOP *
+1 STRING ,
+\G?"!\\"*
+F"
++=\
+2 RPAREN )

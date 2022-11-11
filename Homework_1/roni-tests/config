@@ -1,0 +1,5 @@
+3
+100
+hw1.out
+flex scanner.lex
+g++ -std=c++17 lex.yy.c hw1.cpp -o hw1.out

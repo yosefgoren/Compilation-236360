@@ -1,0 +1,4 @@
+1 COMMENT //
+2 STRING G"S"E
+]*S
+3 NUM 49

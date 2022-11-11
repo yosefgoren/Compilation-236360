@@ -1,0 +1,2 @@
+// only CAP hex-escape-seq should be allowed:
+"comment with \x1a"

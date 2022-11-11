@@ -1,0 +1,3 @@
+1 BINOP +
+1 NUM 0
+1 NUM 35
