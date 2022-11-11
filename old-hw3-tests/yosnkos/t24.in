@@ -1,3 +1,0 @@
-void main(){
-	byte x = 1225b;
-}

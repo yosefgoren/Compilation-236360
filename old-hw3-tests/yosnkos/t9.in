@@ -1,7 +1,0 @@
-void foo(){
-	int x;
-	if(true){
-		int x;
-	}
-}
-void main(){int x;}

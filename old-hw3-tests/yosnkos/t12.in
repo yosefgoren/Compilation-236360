@@ -1,4 +1,0 @@
-void foo(){
-	bool a = true and (1);
-}
-void main(){int x;}

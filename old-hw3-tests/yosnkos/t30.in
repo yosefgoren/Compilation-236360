@@ -1,7 +1,0 @@
-void main(){
-	return;
-}
-int foo(int x){
-	int y = x;
-	return x;
-}

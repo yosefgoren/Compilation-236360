@@ -1,6 +1,0 @@
-void Frankel9000(int x){
-	return;
-}
-void main(){
-	int x;
-}

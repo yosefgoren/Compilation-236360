@@ -1,3 +1,0 @@
-void foo(
-	int foo){}
-void main(){int x;}

@@ -1,5 +1,0 @@
-void foo(){
-	int x = 8 + "he";
-}
-
-void main(){int x;}

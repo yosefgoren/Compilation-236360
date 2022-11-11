@@ -1,5 +1,0 @@
-void main(){
-	const int x = 266;
-	int y = x;
-	x = x +1;
-}
